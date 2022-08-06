@@ -47,6 +47,8 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return list of uniquely named Person objects
      */ //TODO
     public Stream<Person> getUniquelyNamedPeople() {
+        HashSet<String> uniqueNames = new HashSet<>();
+        return people.stream().filter(p -> uniqueNames.add(p.getName()));
 //        List<String> names = getNames()
 //                .stream()
 //                .distinct()
@@ -65,13 +67,13 @@ public final class PersonWarehouse implements Iterable<Person> {
 //
 //        Stream<Person> uniqueNames = people.stream()
 //                .filter(distinctByKey(Person::getName));
-        return people.stream()
-                .filter(distinctByKey(Person::getName));
+//        return people.stream()
+//                .filter(distinctByKey(Person::getName));
     }
-    public static <T>Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
-        Map<Object, Boolean> map = new ConcurrentHashMap<>();
-        return n -> map.putIfAbsent(keyExtractor.apply(n), Boolean.TRUE) == null;
-    }
+//    public static <T>Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+//        Map<Object, Boolean> map = new ConcurrentHashMap<>();
+//        return n -> map.putIfAbsent(keyExtractor.apply(n), Boolean.TRUE) == null;
+//    }
 
 
     /**
@@ -88,9 +90,10 @@ public final class PersonWarehouse implements Iterable<Person> {
      * @return a Stream of respective
      */ //TODO
     public Stream<Person> getFirstNUniquelyNamedPeople(int n) {
+        HashSet<String> firstNUnique = new HashSet<>();
         return people.stream()
                 .limit(n)
-                .filter(distinctByKey(Person::getName));
+                .filter(p -> firstNUnique.add(p.getName()));
     }
 
     /**
